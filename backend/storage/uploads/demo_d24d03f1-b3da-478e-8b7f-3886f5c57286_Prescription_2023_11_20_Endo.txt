@@ -1,0 +1,11 @@
+VALLEY ENDOCRINOLOGY CLINIC
+Provider: Dr. Emily Carter, MD | NPI: 1948201948
+Date: 2023-11-20
+Patient: Johnathan Doe
+
+Rx Prescriptions:
+1. Metformin 1000mg tablet, take 1 tablet orally twice daily with meals (BID).
+2. Lisinopril 10mg tablet, take 1 tablet orally once daily in the morning.
+3. Atorvastatin 20mg tablet, take 1 tablet orally daily at bedtime.
+Refills: 3
+Notes: Patient warned of gastrointestinal side effects. Recheck HbA1c in 3-4 months.

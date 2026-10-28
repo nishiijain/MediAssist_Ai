@@ -1,0 +1,13 @@
+METROPOLITAN HEALTH SYSTEM - CLINICAL LABORATORIES
+Patient: Johnathan Doe | MRN: MED-98402 | DOB: 1966-08-20
+Collection Date: 2024-03-10 | Physician: Dr. Emily Carter
+
+FOLLOW-UP GLYCEMIC & LIPID PANEL:
+Hemoglobin A1c: 7.6 % (Reference: < 5.7%) [IMPROVED - Favorable Response]
+Fasting Blood Glucose: 132 mg/dL (Reference: 70 - 99 mg/dL)
+Total Cholesterol: 188 mg/dL (Reference: < 200 mg/dL) [NORMALIZED]
+LDL Cholesterol: 112 mg/dL (Reference: < 100 mg/dL)
+Blood Pressure: 132/84 mmHg (Reference: < 120/80 mmHg)
+Serum Creatinine: 1.0 mg/dL (Reference: 0.7 - 1.3 mg/dL)
+
+Impression: Substantial glycemic improvement on Metformin 1000mg BID and lifestyle modifications.

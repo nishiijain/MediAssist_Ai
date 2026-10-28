@@ -1,0 +1,22 @@
+VALLEY ENDOCRINOLOGY CLINICAL PRACTICE
+100 Medical Center Way, Suite 400
+Provider: Dr. Emily Carter, MD | License: MD-492019
+
+PRESCRIPTION ORDER
+Date: 2023-11-20
+Patient: Johnathan Doe | MRN: MED-98402
+
+1. Metformin 1000mg tablet
+   Sig: 1 tablet orally twice daily with meals (BID).
+   Dispense: 60 tablets | Refills: 3
+
+2. Lisinopril 10mg tablet
+   Sig: 1 tablet orally once daily in the morning (QD).
+   Dispense: 30 tablets | Refills: 3
+
+3. Atorvastatin 20mg tablet
+   Sig: 1 tablet orally daily at bedtime (QHS).
+   Dispense: 30 tablets | Refills: 3
+
+Allergy Check on File: Patient reports Penicillin allergy (severe rash).
+Beta-lactams contraindicated.
