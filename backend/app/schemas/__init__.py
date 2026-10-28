@@ -226,3 +226,51 @@ class DashboardStatsResponse(BaseModel):
     recent_activity: List[Dict[str, Any]]
     status_distribution: Dict[str, int]
     trend_stats: List[Dict[str, Any]]
+
+# Authentication Schemas
+class DoctorRegisterRequest(BaseModel):
+    full_name: str = Field(..., description="Doctor's full name")
+    license_number: str = Field(..., description="Medical registration/license number")
+    specialization: str = Field(..., description="Medical specialization (e.g. Endocrinology, Internal Medicine)")
+    hospital_name: str = Field(..., description="Hospital or clinic name")
+    email: str = Field(..., description="Professional email address")
+    password: str = Field(..., min_length=6, description="Password")
+    confirm_password: str = Field(..., description="Password confirmation")
+
+class DoctorLoginRequest(BaseModel):
+    email: str
+    password: str
+    remember_me: Optional[bool] = False
+
+class PatientRegisterRequest(BaseModel):
+    full_name: str = Field(..., description="Patient's full name")
+    email: str = Field(..., description="Email address")
+    phone: Optional[str] = Field(None, description="Phone number")
+    date_of_birth: str = Field(..., description="Date of birth YYYY-MM-DD")
+    password: str = Field(..., min_length=6, description="Password")
+    confirm_password: str = Field(..., description="Password confirmation")
+
+class PatientLoginRequest(BaseModel):
+    identifier: str = Field(..., description="Email address or phone number")
+    password: str = Field(..., description="Password")
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    phone: Optional[str] = None
+    full_name: str
+    role: str
+    license_number: Optional[str] = None
+    specialization: Optional[str] = None
+    hospital_name: Optional[str] = None
+    is_verified: bool
+    date_of_birth: Optional[str] = None
+    patient_id: Optional[str] = None
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+class AuthResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserResponse

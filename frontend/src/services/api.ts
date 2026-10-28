@@ -1,4 +1,6 @@
 import {
+  User,
+  AuthResponse,
   Patient,
   MedicalDocument,
   ExtractedField,
@@ -12,11 +14,17 @@ import {
 
 const API_BASE = '/api/v1';
 
+function getAuthHeader(): Record<string, string> {
+  const token = localStorage.getItem('medicassist_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${API_BASE}${url}`, {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeader(),
       ...options?.headers,
     },
   });
@@ -33,6 +41,31 @@ async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
 }
 
 export const api = {
+  // Authentication
+  registerDoctor: (data: any) =>
+    fetchJson<AuthResponse>('/auth/doctor/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  loginDoctor: (data: any) =>
+    fetchJson<AuthResponse>('/auth/doctor/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  registerPatient: (data: any) =>
+    fetchJson<AuthResponse>('/auth/patient/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  loginPatient: (data: any) =>
+    fetchJson<AuthResponse>('/auth/patient/login', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+  getMe: () => fetchJson<User>('/auth/me'),
+  seedDemoAccounts: () =>
+    fetchJson<any>('/auth/seed-demo-accounts', { method: 'POST' }),
+
   // Stats
   getDashboardStats: () => fetchJson<DashboardStats>('/stats/dashboard'),
 
@@ -65,6 +98,9 @@ export const api = {
   uploadDocument: async (formData: FormData): Promise<MedicalDocument> => {
     const res = await fetch(`${API_BASE}/documents/upload`, {
       method: 'POST',
+      headers: {
+        ...getAuthHeader(),
+      },
       body: formData,
     });
     if (!res.ok) {
@@ -137,3 +173,5 @@ export const api = {
   runEvaluation: () =>
     fetchJson<EvaluationRun>('/evaluation/run', { method: 'POST' }),
 };
+
+export const authApi = api;

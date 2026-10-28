@@ -1,15 +1,26 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models import Patient, PatientTimelineEvent, ExtractedField, MedicalDocument, Consultation
 from app.schemas import TimelineEventResponse, TrendSeries
 from app.services.timeline.builder import timeline_builder
+from app.api.deps import get_optional_current_user
+from app.models import User
 
 router = APIRouter()
 
 @router.get("/patient/{patient_id}", response_model=List[TimelineEventResponse])
-def get_patient_timeline(patient_id: str, db: Session = Depends(get_db)):
+def get_patient_timeline(
+    patient_id: str,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    if current_user and current_user.role == "patient" and current_user.patient_id != patient_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Access denied: Patients can only view their own medical timeline."
+        )
     events = db.query(PatientTimelineEvent).filter(
         PatientTimelineEvent.patient_id == patient_id
     ).all()
@@ -48,7 +59,16 @@ def get_patient_timeline(patient_id: str, db: Session = Depends(get_db)):
     return events
 
 @router.get("/patient/{patient_id}/trends", response_model=List[TrendSeries])
-def get_patient_trends(patient_id: str, db: Session = Depends(get_db)):
+def get_patient_trends(
+    patient_id: str,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    if current_user and current_user.role == "patient" and current_user.patient_id != patient_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Access denied: Patients can only view their own biomarker trends."
+        )
     fields = db.query(ExtractedField).filter(
         ExtractedField.patient_id == patient_id,
         ExtractedField.field_category == "lab_result",

@@ -1,0 +1,15 @@
+URGENT CARE ASSOCIATES - ENCOUNTER SUMMARY
+Date of Service: 2024-06-05
+Patient: Johnathan Doe | Age: 58 | Sex: M
+Triage Nurse Entry:
+Allergies: NKDA (No Known Drug Allergies) [TRIAGE ERROR]
+
+Chief Complaint: Sinus congestion and mild sore throat for 4 days.
+Attending Physician Note:
+Patient mentions past severe rash/urticaria with Penicillin allergy. Chart allergy alert updated.
+Physical Exam: Afebrile, clear lungs.
+Assessment: Acute viral rhinosinusitis.
+Plan: Symptomatic treatment. Do NOT prescribe Beta-lactams or Amoxicillin.
+
+Point-of-Care Lab:
+Hemoglobin A1c: 8.9 % (Repeat POC Fingerstick) [CONFLICTING VALUE vs Follow-up trend]

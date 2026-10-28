@@ -159,28 +159,62 @@ npm run dev
 
 ---
 
+---
+
+## Doctor & Patient Authentication System
+
+MedicAssist AI includes a complete role-based authentication and clinical access control system:
+
+- **Professional Welcome Page (`/`)**: Healthcare portal with branding, system architecture highlights, and dual entry cards for Clinicians and Patients.
+- **Doctor Portal (`/doctor/login`, `/doctor/register`)**:
+  - Doctor registration: Full name, medical license / registration number, specialization, hospital/clinic name, professional email, and password.
+  - Simulated Medical Board directory verification active for academic evaluation.
+  - Doctor workspace access: Patient records, AI extraction, hallucination verification, longitudinal timeline, and clinical summary sign-off.
+- **Patient Health Portal (`/patient/login`, `/patient/register`, `/patient/portal`)**:
+  - Patient registration: Full legal name, email or phone, date of birth, gender, and password.
+  - Dedicated patient portal: Personal health profile, direct document uploader bound to MRN, chronological medical timeline, and physician-approved summaries.
+  - Strict Patient Record Isolation: Enforced on the backend; patients cannot view or alter other patients' charts by changing URLs or IDs.
+- **Backend Cryptographic Security**:
+  - Secure password hashing via `bcrypt`.
+  - Cryptographically signed JWT tokens (`pyjwt` with HS256).
+  - Role-based authorization (`doctor` vs `patient`) and tenant ownership checks on backend REST endpoints.
+  - Seeded demo credentials for immediate testing.
+
+### Seeded Demo Accounts (for College & Offline Evaluation)
+
+| Role | Login Identifier | Password | Access Scope |
+| :--- | :--- | :--- | :--- |
+| **Doctor** | `doctor@medicassist.ai` | `Doctor123!` | Full clinical workspace, patient charts, verification & summaries |
+| **Patient** | `patient@medicassist.ai` | `Patient123!` | Isolated patient health portal, personal timeline, own uploads |
+
+---
+
 ## Step-by-Step Clinical Demo Walkthrough
 
-1. Open `http://localhost:3000` in your browser.
-2. Click **"Load Demo Patient & Documents"** in the top navigation bar or on the dashboard.
-   - This automatically populates fictional patient **Johnathan Doe (MRN: MED-98402)**.
-   - Ingests multiple multi-encounter laboratory reports and prescriptions.
-   - Extracts structured diagnostic parameters (HbA1c, Glucose, Blood Pressure, Cholesterol, Metformin).
-   - Automatically executes the deterministic verification engine.
-   - Deliberately flags:
-     - **Allergy Contradiction:** Triage note listing "NKDA" contradicted by physician chart noting "Penicillin allergy: hives/rash".
-     - **Lab Value Contradiction:** Divergent HbA1c values on repeat testing.
-3. Navigate to **Patient History** to explore the chronological timeline and interactive Recharts glycemic trajectory over time.
-4. Navigate to **Document Processing** to upload your own medical PDF or text file, or inspect verbatim extracted plain text.
-5. Navigate to **AI Analysis & Verification** to inspect verbatim source snippets and page references for each clinical finding.
-6. Navigate to **Doctor Review** to inspect the 10-section summary, enter physician notes, make edits, and approve/sign the record.
-7. Navigate to **Evaluation Module** and click **"Run Benchmark Evaluation"** to execute the test suite comparing Baseline vs Proposed verification engine.
+1. Open `http://localhost:3000` in your browser to view the **MedicAssist AI Welcome Page**.
+2. **Doctor Experience**:
+   - Click **"Doctor Login"** (or use the instant 1-Click Doctor Demo button).
+   - Enter `doctor@medicassist.ai` and `Doctor123!`.
+   - Access the **Doctor Overview Dashboard** (`/dashboard`) with complete clinical stats, patient directory, and timeline analytics.
+   - Click **"Load Demo Patient"** in the top navigation bar to populate fictional patient Johnathan Doe (MRN: MED-98402) with conflicting documents for verification testing.
+   - Explore **AI Analysis & Verification** to inspect verbatim source snippet grounding and detected contradictions (e.g., penicillin allergy contradiction).
+   - Navigate to **Doctor Review** to sign off on the clinical summary.
+   - Sign out using the logout button in the top right.
+3. **Patient Experience**:
+   - On the Welcome Page, click **"Patient Login"** (or use the instant 1-Click Patient Demo button).
+   - Enter `patient@medicassist.ai` and `Patient123!`.
+   - Access the isolated **Patient Health Portal** (`/patient/portal`).
+   - Check the **Health Overview** tab (demographics, verified allergies, chronic conditions).
+   - Use the **Upload Reports & Prescriptions** tab to upload a new report to the patient's chart.
+   - Switch to **My Medical Timeline** to view the patient's chronological trajectory.
+   - Inspect **Doctor Summaries** to view physician-verified assessments.
+   - Sign out securely.
 
 ---
 
 ## Running Automated Tests
 
-Run the backend pytest suite covering verification rules, extraction logic, REST endpoints, and evaluation:
+Run the backend pytest suite covering authentication, verification rules, extraction logic, REST endpoints, and evaluation:
 
 ```bash
 PYTHONPATH=backend ./venv/bin/pytest backend/tests/ -v
@@ -196,7 +230,9 @@ npm run build
 
 ## Security & Privacy Considerations
 
-1. **Synthetic Data By Default:** The application operates on synthetic demo patient identities by default.
-2. **Environment Variable Safeguards:** API keys (Gemini / OpenAI) are configured exclusively on the backend via `.env` and are never exposed to the frontend bundle.
-3. **Isolated File Storage:** Uploaded files are stored in `backend/storage/uploads/` using secure UUIDs to prevent directory traversal attacks.
-4. **Offline / Demo Resilience:** The deterministic clinical verification and extraction engine runs completely offline without requiring any external LLM API calls.
+1. **Role-Based Backend Verification:** Access control and patient record isolation are enforced in FastAPI dependencies, not merely hidden in the UI.
+2. **Cryptographic Integrity:** Passwords are hashed using `bcrypt` with unique salts. Sessions are authenticated via signed JWT bearer tokens.
+3. **Synthetic Data By Default:** The application operates on synthetic demo patient identities by default; no real PHI is stored or transmitted.
+4. **Environment Variable Safeguards:** API keys (Gemini / OpenAI) are configured exclusively on the backend via `.env` and are never exposed to the frontend bundle.
+5. **Isolated File Storage:** Uploaded files are stored in `backend/storage/uploads/` using secure UUIDs to prevent directory traversal attacks.
+6. **Offline / Demo Resilience:** The deterministic clinical verification and extraction engine runs completely offline without requiring any external LLM API calls.

@@ -1,3 +1,24 @@
+export interface User {
+  id: string;
+  email: string;
+  phone?: string;
+  full_name: string;
+  role: 'doctor' | 'patient';
+  license_number?: string;
+  specialization?: string;
+  hospital_name?: string;
+  is_verified: boolean;
+  date_of_birth?: string;
+  patient_id?: string;
+  created_at: string;
+}
+
+export interface AuthResponse {
+  access_token: string;
+  token_type: string;
+  user: User;
+}
+
 export interface Patient {
   id: string;
   mrn: string;

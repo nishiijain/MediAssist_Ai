@@ -13,6 +13,9 @@ from app.services.extraction.extractor import extraction_service
 from app.services.verification.engine import verification_engine
 from app.services.timeline.builder import timeline_builder
 
+from app.api.deps import get_optional_current_user
+from app.models import User
+
 router = APIRouter()
 
 @router.post("/upload", response_model=DocumentDetailResponse, status_code=status.HTTP_201_CREATED)
@@ -21,8 +24,16 @@ async def upload_document(
     document_type: str = Form("General Medical Record"),
     encounter_date: Optional[str] = Form(None),
     file: UploadFile = File(...),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
 ):
+    # Patient isolation check
+    if current_user and current_user.role == "patient" and current_user.patient_id != patient_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: Patients are strictly authorized to upload to their own medical record only."
+        )
+
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
         raise HTTPException(status_code=404, detail="Patient not found.")
@@ -149,7 +160,16 @@ async def upload_document(
     return doc
 
 @router.get("/patient/{patient_id}", response_model=List[DocumentResponse])
-def get_patient_documents(patient_id: str, db: Session = Depends(get_db)):
+def get_patient_documents(
+    patient_id: str,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    if current_user and current_user.role == "patient" and current_user.patient_id != patient_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied: Patients can only view their own medical records."
+        )
     return db.query(MedicalDocument).filter(MedicalDocument.patient_id == patient_id).order_by(MedicalDocument.upload_date.desc()).all()
 
 @router.get("/{document_id}", response_model=DocumentDetailResponse)

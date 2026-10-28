@@ -15,6 +15,11 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = f"sqlite:///{BASE_DIR}/medicassist.db"
     
+    # JWT Authentication
+    JWT_SECRET_KEY: str = "medicassist_secure_clinical_jwt_secret_key_2026_demo"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
+    
     # Uploads & Storage
     STORAGE_DIR: Path = STORAGE_DIR
     UPLOAD_DIR: Path = UPLOAD_DIR

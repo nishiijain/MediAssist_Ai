@@ -11,11 +11,22 @@ from app.schemas import (
 )
 from app.services.summarization.generator import summary_generator
 from app.services.timeline.builder import timeline_builder
+from app.api.deps import get_optional_current_user
+from app.models import User
 
 router = APIRouter()
 
 @router.get("/patient/{patient_id}", response_model=Optional[GeneratedSummaryResponse])
-def get_patient_summary(patient_id: str, db: Session = Depends(get_db)):
+def get_patient_summary(
+    patient_id: str,
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_optional_current_user)
+):
+    if current_user and current_user.role == "patient" and current_user.patient_id != patient_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Access denied: Patients can only view summaries for their own record."
+        )
     summary = db.query(GeneratedSummary).filter(
         GeneratedSummary.patient_id == patient_id
     ).order_by(GeneratedSummary.draft_version.desc()).first()

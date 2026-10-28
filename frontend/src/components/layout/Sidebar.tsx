@@ -23,7 +23,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   summariesAwaitingCount = 0,
 }) => {
   const navItems = [
-    { to: '/', label: 'Overview Dashboard', icon: LayoutDashboard },
+    { to: '/dashboard', label: 'Overview Dashboard', icon: LayoutDashboard },
     { to: '/patients', label: 'Patients', icon: Users },
     { to: '/history', label: 'Patient History', icon: History },
     { to: '/documents', label: 'Document Processing', icon: FileText },

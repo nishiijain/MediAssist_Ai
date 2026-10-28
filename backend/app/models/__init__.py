@@ -207,3 +207,30 @@ class EvaluationRun(Base):
     execution_time_seconds = Column(Float, default=0.0)
     unresolved_issues_count = Column(Integer, default=0)
     detailed_results = Column(JSON, default=list)
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid, index=True)
+    email = Column(String(150), unique=True, index=True, nullable=False)
+    phone = Column(String(50), nullable=True)
+    hashed_password = Column(String(255), nullable=False)
+    role = Column(String(20), nullable=False)  # 'doctor' or 'patient'
+    full_name = Column(String(150), nullable=False)
+
+    # Doctor specific fields
+    license_number = Column(String(100), nullable=True)
+    specialization = Column(String(100), nullable=True)
+    hospital_name = Column(String(150), nullable=True)
+    is_verified = Column(Boolean, default=True)  # Set True for demo with badge
+
+    # Patient specific fields
+    date_of_birth = Column(String(20), nullable=True)
+    patient_id = Column(String(36), ForeignKey("patients.id", ondelete="SET NULL"), nullable=True)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationship to Patient record (if role == 'patient')
+    patient = relationship("Patient", foreign_keys=[patient_id])
